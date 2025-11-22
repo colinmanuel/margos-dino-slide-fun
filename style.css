@@ -1,0 +1,309 @@
+:root {
+    --color-jungle-green: #2E8B57;
+    --color-dino-red: #FF4040;
+    --color-sunset-yellow: #FFD700;
+    --color-sandy-beige: #F5DEB3;
+    --color-volcanic-gray: #4A4A4A;
+    --color-sky-blue: #87CEEB;
+    --font-heading: 'Bangers', cursive;
+    --font-body: 'Open Sans', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-body);
+    background-color: var(--color-sandy-beige);
+    color: var(--color-volcanic-gray);
+    overflow: hidden; /* Prevent scrolling */
+    height: 100vh;
+    width: 100vw;
+    background-image: 
+        radial-gradient(circle at 10% 20%, rgba(46, 139, 87, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(46, 139, 87, 0.1) 0%, transparent 20%);
+}
+
+#app {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    padding: 20px;
+    background-color: var(--color-sandy-beige); /* Ensure opaque background for transitions */
+}
+
+.screen.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.95);
+    z-index: 0;
+}
+
+.screen.active {
+    opacity: 1;
+    pointer-events: all;
+    transform: scale(1);
+    z-index: 1;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+h1 {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    color: var(--color-jungle-green);
+    text-shadow: 2px 2px 0px #fff;
+    margin: 0;
+    letter-spacing: 2px;
+}
+
+p {
+    font-size: 1.2rem;
+    margin: 10px 0 0;
+}
+
+/* Buttons */
+button {
+    font-family: var(--font-heading);
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: transform 0.1s, filter 0.1s;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    outline: none;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+.btn {
+    padding: 15px 30px;
+    font-size: 1.5rem;
+    margin: 10px;
+    width: 200px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: white;
+}
+
+.btn-easy { background-color: var(--color-jungle-green); }
+.btn-medium { background-color: var(--color-sunset-yellow); color: var(--color-volcanic-gray); }
+.btn-hard { background-color: var(--color-dino-red); }
+
+.btn-back, .btn-home {
+    background-color: var(--color-volcanic-gray);
+    color: white;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    margin-top: 20px;
+}
+
+.btn-option {
+    background-color: var(--color-sky-blue);
+    color: var(--color-volcanic-gray);
+    justify-content: center;
+}
+
+.btn-option.selected {
+    background-color: var(--color-dino-red);
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 0 0 4px var(--color-sunset-yellow);
+}
+
+/* Image Grid */
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    max-width: 600px;
+    width: 100%;
+}
+
+.image-card {
+    background: white;
+    padding: 10px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    cursor: pointer;
+    transition: transform 0.2s;
+    text-align: center;
+}
+
+.image-card:active {
+    transform: scale(0.95);
+}
+
+.image-card img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+}
+
+.image-card span {
+    display: block;
+    margin-top: 5px;
+    font-family: var(--font-heading);
+    font-size: 1.2rem;
+    color: var(--color-volcanic-gray);
+}
+
+/* Limit Screen */
+.limit-toggle {
+    display: flex;
+    background: rgba(0,0,0,0.1);
+    border-radius: 30px;
+    padding: 5px;
+    margin-bottom: 20px;
+}
+
+.toggle-btn {
+    background: transparent;
+    color: var(--color-volcanic-gray);
+    padding: 10px 20px;
+    border-radius: 25px;
+    box-shadow: none;
+    font-size: 1.2rem;
+}
+
+.toggle-btn.active {
+    background: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.limit-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.limit-options.hidden {
+    display: none;
+}
+
+/* Puzzle Board */
+#puzzle-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+}
+
+#puzzle-board {
+    display: grid;
+    background-color: var(--color-volcanic-gray);
+    padding: 5px;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+    width: 90vw;
+    height: 90vw;
+    max-width: 500px;
+    max-height: 500px;
+    position: relative;
+}
+
+.puzzle-piece {
+    background-size: 100% 100%; /* Will be overridden by JS */
+    cursor: pointer;
+    transition: transform 0.3s ease, border-color 0.2s;
+    border: 1px solid var(--color-jungle-green);
+    box-sizing: border-box;
+}
+
+.puzzle-piece.selected {
+    border: 4px solid var(--color-sunset-yellow);
+    z-index: 10;
+    transform: scale(1.02);
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 500px;
+}
+
+.game-info {
+    font-family: var(--font-heading);
+    font-size: 1.5rem;
+    color: var(--color-dino-red);
+    background: white;
+    padding: 5px 15px;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Offline Prompt */
+#offline-prompt {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    text-align: center;
+    z-index: 100;
+    width: 90%;
+    max-width: 400px;
+}
+
+#offline-prompt.hidden {
+    display: none;
+}
+
+#offline-prompt p {
+    margin-bottom: 15px;
+    color: var(--color-volcanic-gray);
+}
+
+#offline-prompt button {
+    background-color: var(--color-jungle-green);
+    color: white;
+    width: 100%;
+    margin: 0;
+    justify-content: center;
+}
+
+/* Landscape adjustments */
+@media (orientation: landscape) and (max-height: 600px) {
+    #app {
+        flex-direction: row;
+    }
+    
+    .image-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+
+    #puzzle-board {
+        width: 70vh;
+        height: 70vh;
+    }
+}

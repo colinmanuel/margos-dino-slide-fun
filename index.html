@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Margo's Dino Puzzle</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="theme-color" content="#2E8B57">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Dino Puzzle">
+    <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+</head>
+<body>
+    <div id="app">
+        <!-- Home Screen: Image Selection -->
+        <section id="home-screen" class="screen active">
+            <header>
+                <h1>Margo's Dino Puzzle</h1>
+                <p>Pick a Dino to Start!</p>
+            </header>
+            <div class="image-grid" id="image-selection-grid">
+                <!-- Images will be injected here by JS -->
+            </div>
+        </section>
+
+        <!-- Difficulty Screen -->
+        <section id="difficulty-screen" class="screen hidden">
+            <header>
+                <h1>Choose Difficulty</h1>
+            </header>
+            <div class="button-group vertical">
+                <button class="btn btn-easy" data-difficulty="easy">
+                    <span>Easy</span>
+                    <span class="stars">★</span>
+                </button>
+                <button class="btn btn-medium" data-difficulty="medium">
+                    <span>Medium</span>
+                    <span class="stars">★★</span>
+                </button>
+                <button class="btn btn-hard" data-difficulty="hard">
+                    <span>Hard</span>
+                    <span class="stars">★★★</span>
+                </button>
+            </div>
+            <button class="btn-back" data-target="home-screen">Back</button>
+        </section>
+
+        <!-- Game Limit Screen -->
+        <section id="limit-screen" class="screen hidden">
+            <header>
+                <h1>How do you want to play?</h1>
+            </header>
+            
+            <div class="limit-toggle">
+                <button class="toggle-btn active" data-mode="time">Time Limit</button>
+                <button class="toggle-btn" data-mode="swaps">Swap Limit</button>
+            </div>
+
+            <div id="time-options" class="limit-options active">
+                <button class="btn btn-option" data-limit="120">2 Minutes</button>
+                <button class="btn btn-option" data-limit="300">5 Minutes</button>
+                <button class="btn btn-option" data-limit="600">10 Minutes</button>
+            </div>
+
+            <div id="swap-options" class="limit-options hidden">
+                <button class="btn btn-option" data-limit="20">20 Swaps</button>
+                <button class="btn btn-option" data-limit="50">50 Swaps</button>
+                <button class="btn btn-option" data-limit="100">100 Swaps</button>
+            </div>
+
+            <button class="btn-back" data-target="difficulty-screen">Back</button>
+        </section>
+
+        <!-- Puzzle Screen -->
+        <section id="game-screen" class="screen hidden">
+            <header class="game-header">
+                <div class="game-info">
+                    <span id="game-timer">Time: 0:00</span>
+                </div>
+                <button class="btn-home">Home</button>
+            </header>
+            
+            <div id="puzzle-container">
+                <div id="puzzle-board">
+                    <!-- Puzzle pieces injected here -->
+                </div>
+            </div>
+            
+            <div id="game-message" class="hidden">
+                <!-- Win/Loss messages -->
+            </div>
+        </section>
+    </div>
+
+    <div id="offline-prompt" class="hidden">
+        <div class="prompt-content">
+            <p>Add Margo's Dino Puzzle to your Home Screen to play anytime!</p>
+            <button id="close-prompt">Got it!</button>
+        </div>
+    </div>
+
+    <script src="game.js"></script>
+    <script src="app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(registration => console.log('SW registered'))
+                    .catch(err => console.log('SW registration failed', err));
+            });
+        }
+    </script>
+</body>
+</html>
