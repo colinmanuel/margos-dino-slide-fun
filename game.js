@@ -99,6 +99,7 @@ class DinoPuzzle {
     }
 
     start(config) {
+        if (this.timerInterval) clearInterval(this.timerInterval);
         this.state = config;
         this.isGameOver = false;
         this.selectedPiece = null;
