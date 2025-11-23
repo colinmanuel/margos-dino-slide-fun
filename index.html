@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -8,13 +9,15 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Open+Sans:wght@400;700&display=swap"
+        rel="stylesheet">
     <meta name="theme-color" content="#2E8B57">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Dino Puzzle">
     <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 </head>
+
 <body>
     <div id="app">
         <!-- Home Screen: Image Selection -->
@@ -55,7 +58,7 @@
             <header>
                 <h1>How do you want to play?</h1>
             </header>
-            
+
             <div class="limit-toggle">
                 <button class="toggle-btn active" data-mode="time">Time Limit</button>
                 <button class="toggle-btn" data-mode="swaps">Swap Limit</button>
@@ -67,7 +70,7 @@
                 <button class="btn btn-option" data-limit="600">10 Minutes</button>
             </div>
 
-            <div id="swap-options" class="limit-options hidden">
+            <div id="swaps-options" class="limit-options hidden">
                 <button class="btn btn-option" data-limit="20">20 Swaps</button>
                 <button class="btn btn-option" data-limit="50">50 Swaps</button>
                 <button class="btn btn-option" data-limit="100">100 Swaps</button>
@@ -84,13 +87,13 @@
                 </div>
                 <button class="btn-home">Home</button>
             </header>
-            
+
             <div id="puzzle-container">
                 <div id="puzzle-board">
                     <!-- Puzzle pieces injected here -->
                 </div>
             </div>
-            
+
             <div id="game-message" class="hidden">
                 <!-- Win/Loss messages -->
             </div>
@@ -116,4 +119,5 @@
         }
     </script>
 </body>
+
 </html>
