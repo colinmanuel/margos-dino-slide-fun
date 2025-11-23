@@ -10,7 +10,6 @@ I want to create a tile sliding puzzle for my 7 year old daughter. The app will 
 - **Target Audience:** 7-year-old child (Margo)
 - **Core Functionality:** A sliding puzzle game where the user selects an image, chooses a difficulty level, sets a game limit (time or number of swaps), and solves the puzzle by swapping squares to reconstruct the image.
 - **Offline Capability:** The app must work offline after being added to the iPad Home Screen.
-- **Development Platform:** Lovable.dev
 
 #### **2. Functional Requirements**
 
@@ -119,16 +118,15 @@ I want to create a tile sliding puzzle for my 7 year old daughter. The app will 
 - All assets (images, audio, HTML, CSS, JavaScript) must be cached using a service worker.
 - The app should display a message if the user tries to load it without an internet connection for the first time: “Please connect to the internet to load the app for the first time.”
 
-#### **4. Technical Requirements for Lovable.dev**
+#### **4. Technical Requirements**
 
 ##### **4.1. Project Structure**
 - **HTML/CSS/JavaScript:**
   - Use a single-page application (SPA) structure with HTML for the layout, CSS for styling, and JavaScript for interactivity.
   - Organize the app into four main views: Image Selection, Difficulty Selection, Game Limit Selection, and Puzzle Board.
 - **Assets:**
-  - Include the four provided dinosaur images as puzzle options.
-  - Include three audio files for swap, fail, and completion sounds.
-  - Include the dinosaur-themed app icon (192x192 PNG).
+  - Generate various puzzle images of dinosaurs using AI.
+  - Generate audio files for swap, fail, and completion sounds using AI.
 
 ##### **4.2. PWA Setup**
 - Create a `manifest.json` file with:
@@ -136,7 +134,6 @@ I want to create a tile sliding puzzle for my 7 year old daughter. The app will 
   - `short_name`: “Dino Puzzle”
   - `start_url`: “/index.html”
   - `display`: “standalone”
-  - `icons`: Include the 192x192 PNG icon.
 - Create a service worker (`sw.js`) to cache all assets for offline use:
   - Cache HTML, CSS, JavaScript, images, and audio files on first load.
   - Serve cached assets when offline.
@@ -200,23 +197,3 @@ I want to create a tile sliding puzzle for my 7 year old daughter. The app will 
 - Include a scoring system or rewards (e.g., collect stars based on remaining time/swaps).
 - Add a “scramble again” option to reshuffle the squares without changing the image or difficulty.
 - Allow the user to toggle background music (e.g., a playful prehistoric tune).
-
----
-
-### **Implementation Notes for Lovable.dev**
-1. **Set Up the Project:**
-   - Create a new project in Lovable.dev and set up the PWA structure (HTML, CSS, JavaScript, manifest, service worker).
-   - Upload the four dinosaur images, audio files, and app icon as assets.
-2. **Build the UI:**
-   - Add a new Game Limit Selection screen with toggle/radio buttons for “Time Limit” and “Swap Limit,” and buttons for the predefined options.
-   - Update the Puzzle screen to display a grid of squares instead of jigsaw pieces, with a timer or swap counter at the top.
-   - Use Lovable.dev’s drag-and-drop UI builder to create the layout and style buttons with the Jurassic Park-inspired theme.
-3. **Implement Logic:**
-   - Use JavaScript to slice the image into squares and shuffle them (e.g., with the Fisher-Yates algorithm).
-   - Implement the swap mechanic by tracking clicks and animating the swap with CSS transitions.
-   - Add a countdown timer (for Time Limit mode) or swap counter (for Swap Limit mode) using JavaScript.
-   - Add audio playback and completion detection as before.
-4. **Test Offline Functionality:**
-   - Test the service worker to ensure all assets are cached and the app works offline.
-5. **Deploy and Test on iPad:**
-   - Deploy the app via Lovable.dev and test it on an iPad to ensure touch interactions and PWA features work as expected.
