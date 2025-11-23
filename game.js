@@ -1,82 +1,3 @@
-class SoundManager {
-    constructor() {
-        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
-    }
-
-    resume() {
-        if (this.ctx.state === 'suspended') {
-            this.ctx.resume();
-        }
-    }
-
-    play(type) {
-        this.resume();
-        switch (type) {
-            case 'swap': this.playSwap(); break;
-            case 'win': this.playWin(); break;
-            case 'fail': this.playFail(); break;
-        }
-    }
-
-    playSwap() {
-        const t = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(600, t);
-        osc.frequency.exponentialRampToValueAtTime(300, t + 0.1);
-
-        gain.gain.setValueAtTime(0.3, t);
-        gain.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
-
-        osc.start(t);
-        osc.stop(t + 0.1);
-    }
-
-    playWin() {
-        const t = this.ctx.currentTime;
-        const notes = [523.25, 659.25, 783.99, 1046.50];
-        notes.forEach((freq, i) => {
-            const osc = this.ctx.createOscillator();
-            const gain = this.ctx.createGain();
-            osc.connect(gain);
-            gain.connect(this.ctx.destination);
-
-            osc.type = 'triangle';
-            osc.frequency.value = freq;
-
-            const start = t + (i * 0.1);
-            gain.gain.setValueAtTime(0, start);
-            gain.gain.linearRampToValueAtTime(0.2, start + 0.05);
-            gain.gain.exponentialRampToValueAtTime(0.01, start + 0.4);
-
-            osc.start(start);
-            osc.stop(start + 0.4);
-        });
-    }
-
-    playFail() {
-        const t = this.ctx.currentTime;
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.connect(gain);
-        gain.connect(this.ctx.destination);
-
-        osc.type = 'sawtooth';
-        osc.frequency.setValueAtTime(200, t);
-        osc.frequency.linearRampToValueAtTime(50, t + 0.5);
-
-        gain.gain.setValueAtTime(0.3, t);
-        gain.gain.linearRampToValueAtTime(0.01, t + 0.5);
-
-        osc.start(t);
-        osc.stop(t + 0.5);
-    }
-}
-
 class DinoPuzzle {
     constructor() {
         this.board = document.getElementById('puzzle-board');
@@ -274,7 +195,10 @@ class DinoPuzzle {
     }
 
     playSound(name) {
-        this.soundManager.play(name);
+        if (this.audio[name]) {
+            this.audio[name].currentTime = 0;
+            this.audio[name].play().catch(e => console.log("Audio play failed", e));
+        }
     }
 }
 
