@@ -7,6 +7,69 @@ const state = {
     limitValue: 120, // seconds or count
 };
 
+// Background Music Manager
+const bgm = {
+    home: new Audio('assets/audio/app-background-music.mp3'),
+    game: new Audio('assets/audio/app-gameplay-background-music.mp3'),
+    success: new Audio('assets/audio/success.mp3'),
+    fail: new Audio('assets/audio/fail.mp3'),
+    current: null,
+
+    init() {
+        this.home.loop = true;
+        this.game.loop = true;
+        this.home.volume = 0.5;
+        this.game.volume = 0.4;
+        this.success.volume = 0.6;
+        this.fail.volume = 0.6;
+    },
+
+    play(track) {
+        if (this.current === track) return;
+
+        // Fade out current
+        if (this.current) {
+            this.current.pause();
+            this.current.currentTime = 0;
+        }
+
+        this.current = track;
+        track.play().catch(e => console.log("Audio play failed (autoplay policy?)", e));
+    },
+
+    playHome() {
+        this.play(this.home);
+    },
+
+    playGame() {
+        this.play(this.game);
+    },
+
+    playWinSequence() {
+        if (this.current) this.current.pause();
+        this.current = null;
+
+        this.success.currentTime = 0;
+        this.success.play().then(() => {
+            this.success.onended = () => {
+                this.playHome();
+            };
+        }).catch(e => console.error("Success sound failed", e));
+    },
+
+    playFailSequence() {
+        if (this.current) this.current.pause();
+        this.current = null;
+
+        this.fail.currentTime = 0;
+        this.fail.play().then(() => {
+            this.fail.onended = () => {
+                this.playHome();
+            };
+        }).catch(e => console.error("Fail sound failed", e));
+    }
+};
+
 // DOM Elements
 const screens = document.querySelectorAll('.screen');
 const imageGrid = document.getElementById('image-selection-grid');
@@ -24,9 +87,26 @@ const IMAGES = [
 
 // Initialization
 function initApp() {
+    bgm.init();
     renderImageSelection();
     setupNavigation();
     setupLimitSelection();
+    setupGameEvents();
+
+    // Start music on first interaction
+    document.body.addEventListener('click', () => {
+        if (!bgm.current) bgm.playHome();
+    }, { once: true });
+}
+
+function setupGameEvents() {
+    window.addEventListener('dino-game-win', () => {
+        bgm.playWinSequence();
+    });
+
+    window.addEventListener('dino-game-lose', () => {
+        bgm.playFailSequence();
+    });
 }
 
 // Render Image Selection Grid
@@ -63,7 +143,10 @@ function navigateTo(screenId) {
     state.currentScreen = screenId;
 
     if (screenId === 'game-screen') {
+        bgm.playGame();
         startGame();
+    } else if (screenId === 'home-screen') {
+        bgm.playHome();
     }
 }
 
@@ -98,9 +181,9 @@ function setupLimitSelection() {
         btn.addEventListener('click', () => {
             limitToggleBtns.forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            
+
             state.limitType = btn.dataset.mode;
-            
+
             limitOptions.forEach(opt => {
                 if (opt.id === `${state.limitType}-options`) {
                     opt.classList.remove('hidden');
@@ -121,7 +204,7 @@ function setupLimitSelection() {
             btn.classList.add('selected');
 
             state.limitValue = parseInt(btn.dataset.limit);
-            
+
             // Small delay to show selection before starting
             setTimeout(() => {
                 navigateTo('game-screen');

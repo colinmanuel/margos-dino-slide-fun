@@ -1,3 +1,82 @@
+class SoundManager {
+    constructor() {
+        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    resume() {
+        if (this.ctx.state === 'suspended') {
+            this.ctx.resume();
+        }
+    }
+
+    play(type) {
+        this.resume();
+        switch (type) {
+            case 'swap': this.playSwap(); break;
+            case 'win': this.playWin(); break;
+            case 'fail': this.playFail(); break;
+        }
+    }
+
+    playSwap() {
+        const t = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(600, t);
+        osc.frequency.exponentialRampToValueAtTime(300, t + 0.1);
+
+        gain.gain.setValueAtTime(0.3, t);
+        gain.gain.exponentialRampToValueAtTime(0.01, t + 0.1);
+
+        osc.start(t);
+        osc.stop(t + 0.1);
+    }
+
+    playWin() {
+        const t = this.ctx.currentTime;
+        const notes = [523.25, 659.25, 783.99, 1046.50];
+        notes.forEach((freq, i) => {
+            const osc = this.ctx.createOscillator();
+            const gain = this.ctx.createGain();
+            osc.connect(gain);
+            gain.connect(this.ctx.destination);
+
+            osc.type = 'triangle';
+            osc.frequency.value = freq;
+
+            const start = t + (i * 0.1);
+            gain.gain.setValueAtTime(0, start);
+            gain.gain.linearRampToValueAtTime(0.2, start + 0.05);
+            gain.gain.exponentialRampToValueAtTime(0.01, start + 0.4);
+
+            osc.start(start);
+            osc.stop(start + 0.4);
+        });
+    }
+
+    playFail() {
+        const t = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.type = 'sawtooth';
+        osc.frequency.setValueAtTime(200, t);
+        osc.frequency.linearRampToValueAtTime(50, t + 0.5);
+
+        gain.gain.setValueAtTime(0.3, t);
+        gain.gain.linearRampToValueAtTime(0.01, t + 0.5);
+
+        osc.start(t);
+        osc.stop(t + 0.5);
+    }
+}
+
 class DinoPuzzle {
     constructor() {
         this.board = document.getElementById('puzzle-board');
@@ -13,11 +92,9 @@ class DinoPuzzle {
         this.selectedPiece = null;
         this.isGameOver = false;
 
-        // Audio (Placeholders for now)
+        // Audio
         this.audio = {
-            swap: new Audio('assets/audio/swap.mp3'),
-            fail: new Audio('assets/audio/fail.mp3'),
-            win: new Audio('assets/audio/win.mp3')
+            swap: new Audio('assets/audio/swap.mp3')
         };
     }
 
@@ -186,17 +263,17 @@ class DinoPuzzle {
         if (this.timerInterval) clearInterval(this.timerInterval);
 
         if (win) {
-            this.playSound('win');
-            alert("Great job, Margo! You solved the puzzle!"); // Replace with custom UI later
+            window.dispatchEvent(new CustomEvent('dino-game-win'));
+            // Alert moved to setTimeout to allow audio to start if handled elsewhere
+            setTimeout(() => alert("Great job, Margo! You solved the puzzle!"), 100);
         } else {
-            this.playSound('fail');
-            alert(this.state.limitType === 'time' ? "Time's up, Margo!" : "No swaps left, Margo!");
+            window.dispatchEvent(new CustomEvent('dino-game-lose'));
+            setTimeout(() => alert(this.state.limitType === 'time' ? "Time's up, Margo!" : "No swaps left, Margo!"), 100);
         }
     }
 
     playSound(name) {
-        // Simple error handling if audio is missing
-        this.audio[name].play().catch(e => console.log("Audio play failed", e));
+        this.soundManager.play(name);
     }
 }
 
